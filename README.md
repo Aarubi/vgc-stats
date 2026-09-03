@@ -10,7 +10,7 @@ Setup rápido
 npm install
 ```
 
-2. Crie um arquivo `.env` na raiz do projeto com as variáveis `DISCORD_TOKEN`, `CLIENT_ID` e `GUILD_ID`.
+2. Crie um arquivo `.env` na raiz do projeto e preencha `DISCORD_TOKEN`, `CLIENT_ID`, `GUILD_ID`, `GOOGLE_SHEETS_API_KEY` e `GOOGLE_SHEET_ID`.
 
 3. Registre o comando na sua guild (teste):
 
@@ -26,8 +26,10 @@ npm start
 
 Uso
 
-- Use `/pstats nome:<nome-ou-id>` no canal da guild onde o comando foi registrado.
-- O bot responde com um embed contendo sprite, habilidades e stats.
+- `/pstats nome:<nome-ou-id>` — consulta um Pokémon na PokeAPI e exibe seu sprite, habilidades, stats base e ranges no nível 50.
+- `/pmeta` — exibe o usage mensal dos Pokémon a partir do arquivo em `src/assets`, com rank, nome, percentual de Usage e paginação.
+- `/pteam` — sorteia um time da aba `Champions M-B` da planilha do Google e exibe Team ID, descrição, os seis Pokémon, Pokepaste, status de EVs e rental code.
+- `/pteam-featured` — sorteia um time da aba `Champions M-B Featured Teams` e exibe os mesmos dados do `/pteam`.
 
 Arquivos principais
 

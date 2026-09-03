@@ -1,5 +1,7 @@
 import { Client, GatewayIntentBits } from 'discord.js';
 import { handlePmetaCommand } from './pmeta-handler.js';
+import { handlePteamFeaturedCommand } from './pteam-featured-handler.js';
+import { handlePteamCommand } from './pteam-handler.js';
 import { handlePstatsCommand } from './pstats-handler.js';
 
 export function createClient() {
@@ -15,6 +17,10 @@ export function createClient() {
         await handlePstatsCommand(interaction);
       } else if (interaction.commandName === 'pmeta') {
         await handlePmetaCommand(interaction);
+      } else if (interaction.commandName === 'pteam') {
+        await handlePteamCommand(interaction);
+      } else if (interaction.commandName === 'pteam-featured') {
+        await handlePteamFeaturedCommand(interaction);
       }
       return;
     }

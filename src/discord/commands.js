@@ -14,5 +14,13 @@ export const commands = [
   {
     name: 'pmeta',
     description: 'Mostra o usage mensal dos Pokémon'
+  },
+  {
+    name: 'pteam',
+    description: 'Mostra um time aleatório da planilha'
+  },
+  {
+    name: 'pteam-featured',
+    description: 'Mostra um time featured aleatório da planilha'
   }
 ];
