@@ -10,5 +10,9 @@ export const commands = [
         required: true
       }
     ]
+  },
+  {
+    name: 'pmeta',
+    description: 'Mostra o usage mensal dos Pokémon'
   }
 ];

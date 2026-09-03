@@ -1,4 +1,5 @@
 import { Client, GatewayIntentBits } from 'discord.js';
+import { handlePmetaCommand } from './pmeta-handler.js';
 import { handlePstatsCommand } from './pstats-handler.js';
 
 export function createClient() {
@@ -9,8 +10,14 @@ export function createClient() {
   });
 
   client.on('interactionCreate', async (interaction) => {
-    if (!interaction.isChatInputCommand() || interaction.commandName !== 'pstats') return;
-    await handlePstatsCommand(interaction);
+    if (interaction.isChatInputCommand()) {
+      if (interaction.commandName === 'pstats') {
+        await handlePstatsCommand(interaction);
+      } else if (interaction.commandName === 'pmeta') {
+        await handlePmetaCommand(interaction);
+      }
+      return;
+    }
   });
 
   return client;
