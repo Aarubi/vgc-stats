@@ -9,6 +9,11 @@ function formatWeight(weightInHectograms) {
   return `${(weightInHectograms / 10).toFixed(1)} kg`;
 }
 
+export function getPokemonSprite(pokemon) {
+  return pokemon.sprites.other?.['official-artwork']?.front_default
+    || pokemon.sprites.front_default;
+}
+
 export function createPokemonEmbed(pokemon) {
   const abilities = pokemon.abilities
     .map((ability) => ability.is_hidden
@@ -16,8 +21,7 @@ export function createPokemonEmbed(pokemon) {
       : capitalize(ability.ability.name))
     .join(', ');
   const stats = formatStats(pokemon.stats);
-  const sprite = pokemon.sprites.other?.['official-artwork']?.front_default
-    || pokemon.sprites.front_default;
+  const sprite = getPokemonSprite(pokemon);
 
   return new EmbedBuilder()
     .setTitle(`${capitalize(pokemon.name)} (#${pokemon.id})`)

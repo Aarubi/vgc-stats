@@ -26,7 +26,7 @@ npm start
 
 Uso
 
-- `/pstats nome:<nome-ou-id>` — consulta um Pokémon na PokeAPI e exibe seu sprite, habilidades, stats base e ranges no nível 50.
+- `/pstats nome:<nome-ou-id>` — consulta um Pokémon na PokeAPI e exibe seu sprite, habilidades, stats base e ranges no nível 50. As páginas seguintes mostram o uso de Abilities, Items, Spreads, Moves e Teammates.
 - `/pmeta` — exibe o usage mensal dos Pokémon a partir do arquivo em `src/assets`, com rank, nome, percentual de Usage e paginação.
 - `/pteam` — sorteia um time da aba `Champions M-B` da planilha do Google e exibe Team ID, descrição, os seis Pokémon, Pokepaste, status de EVs e rental code.
 - `/pteam-featured` — sorteia um time da aba `Champions M-B Featured Teams` e exibe os mesmos dados do `/pteam`.
