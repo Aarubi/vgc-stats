@@ -11,6 +11,7 @@ export const commands = [
         name: 'nome',
         description: 'Nome ou ID do Pokémon',
         type: 3,
+        max_length: 64,
         required: true
       }
     ]
@@ -21,6 +22,25 @@ export const commands = [
   },
   {
     name: 'pteam',
-    description: 'Mostra um time aleatório da Regulation M-C'
+    description: 'Mostra um time aleatório da Regulation M-C',
+    options: [
+      {
+        name: 'pokemon',
+        description: 'Filtra times que contenham este Pokémon',
+        type: 3,
+        max_length: 64,
+        autocomplete: true
+      },
+      {
+        name: 'rental',
+        description: 'Filtra pela disponibilidade de rental code',
+        type: 5
+      },
+      {
+        name: 'evs',
+        description: 'Filtra pela disponibilidade dos EVs',
+        type: 5
+      }
+    ]
   }
 ];

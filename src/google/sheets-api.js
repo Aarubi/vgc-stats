@@ -1,6 +1,8 @@
 import axios from 'axios';
 
 const SHEETS_API_URL = 'https://sheets.googleapis.com/v4/spreadsheets';
+const REQUEST_TIMEOUT_MS = 10_000;
+const MAX_RESPONSE_SIZE = 10 * 1024 * 1024;
 const TEAMS_SHEET_NAME = 'Champions M-C';
 // Reservado para quando a aba e o comando de featured teams da M-C forem reativados.
 const FEATURED_TEAMS_SHEET_NAME = 'Champions M-C Featured Teams';
@@ -49,7 +51,10 @@ function parseTeamRows(rows) {
 export async function getTeams({ apiKey, sheetId, sheetName = TEAMS_SHEET_NAME }) {
   const range = encodeURIComponent(`'${sheetName}'!A:AZ`);
   const response = await axios.get(`${SHEETS_API_URL}/${sheetId}/values/${range}`, {
-    params: { key: apiKey }
+    headers: { 'x-goog-api-key': apiKey },
+    timeout: REQUEST_TIMEOUT_MS,
+    maxContentLength: MAX_RESPONSE_SIZE,
+    maxBodyLength: MAX_RESPONSE_SIZE
   });
 
   return parseTeamRows(response.data.values || []);

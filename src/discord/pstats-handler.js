@@ -2,6 +2,9 @@ import { createPstatsPages, getPstatsPageComponents } from './pstats-pages.js';
 import { getPokemon } from '../pokemon/pokemon-api.js';
 import { getPokemonMetaStats } from '../pokemon/meta-stats.js';
 
+const COLLECTOR_TTL_MS = 5 * 60 * 1000;
+const MAX_COLLECTED_INTERACTIONS = 50;
+
 export async function handlePstatsCommand(interaction) {
   const query = interaction.options.getString('nome');
   await interaction.deferReply();
@@ -15,20 +18,25 @@ export async function handlePstatsCommand(interaction) {
       components: getPstatsPageComponents(page, pages.length)
     });
 
-    await updatePage(0);
+    const message = await updatePage(0);
 
-    const collector = interaction.channel.createMessageComponentCollector({
-      time: 10 * 60 * 1000,
+    const collector = message.createMessageComponentCollector({
+      time: COLLECTOR_TTL_MS,
+      max: MAX_COLLECTED_INTERACTIONS,
       filter: (buttonInteraction) => buttonInteraction.user.id === interaction.user.id
         && buttonInteraction.customId.startsWith('pstats:')
     });
 
     collector.on('collect', async (buttonInteraction) => {
-      const [, direction, currentPage] = buttonInteraction.customId.split(':');
-      const page = Number(currentPage) + (direction === 'next' ? 1 : -1);
+      try {
+        const [, direction, currentPage] = buttonInteraction.customId.split(':');
+        const page = Number(currentPage) + (direction === 'next' ? 1 : -1);
 
-      await buttonInteraction.deferUpdate();
-      await updatePage(page);
+        await buttonInteraction.deferUpdate();
+        await updatePage(page);
+      } catch (error) {
+        console.error('Erro ao atualizar a página do Pokémon:', error.message);
+      }
     });
 
     collector.on('end', async () => {
@@ -40,7 +48,7 @@ export async function handlePstatsCommand(interaction) {
       return;
     }
 
-    console.error(error);
+    console.error('Erro ao consultar a PokeAPI:', error.message);
     await interaction.editReply('Erro ao consultar a PokeAPI');
   }
 }
