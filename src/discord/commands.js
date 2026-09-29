@@ -1,5 +1,9 @@
 export const commands = [
   {
+    name: 'help',
+    description: 'Lista os comandos disponíveis do bot'
+  },
+  {
     name: 'pstats',
     description: 'Mostra informações de um Pokémon (stats, moves, tipos, sprite e habilidades)',
     options: [
@@ -17,10 +21,6 @@ export const commands = [
   },
   {
     name: 'pteam',
-    description: 'Mostra um time aleatório da planilha'
-  },
-  {
-    name: 'pteam-featured',
-    description: 'Mostra um time featured aleatório da planilha'
+    description: 'Mostra um time aleatório da Regulation M-C'
   }
 ];

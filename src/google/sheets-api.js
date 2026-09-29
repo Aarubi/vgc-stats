@@ -1,8 +1,9 @@
 import axios from 'axios';
 
 const SHEETS_API_URL = 'https://sheets.googleapis.com/v4/spreadsheets';
-const TEAMS_SHEET_NAME = 'Champions M-B';
-const FEATURED_TEAMS_SHEET_NAME = 'Champions M-B Featured Teams';
+const TEAMS_SHEET_NAME = 'Champions M-C';
+// Reservado para quando a aba e o comando de featured teams da M-C forem reativados.
+const FEATURED_TEAMS_SHEET_NAME = 'Champions M-C Featured Teams';
 
 function findColumn(headers, name) {
   return headers.findIndex((header) => header.trim() === name);

@@ -26,12 +26,14 @@ npm start
 
 Uso
 
+- `/help` — lista todos os comandos disponíveis do bot e uma breve descrição de cada um.
 - `/pstats nome:<nome-ou-id>` — consulta um Pokémon na PokeAPI e exibe seu sprite, habilidades, stats base e ranges no nível 50. As páginas seguintes mostram o uso de Abilities, Items, Spreads, Moves e Teammates.
 - `/pmeta` — exibe o usage mensal dos Pokémon a partir do arquivo em `src/assets`, com rank, nome, percentual de Usage e paginação.
-- `/pteam` — sorteia um time da aba `Champions M-B` da planilha do Google e exibe Team ID, descrição, os seis Pokémon, Pokepaste, status de EVs e rental code.
-- `/pteam-featured` — sorteia um time da aba `Champions M-B Featured Teams` e exibe os mesmos dados do `/pteam`.
+- `/pteam` — sorteia um time da aba `Champions M-C` da planilha do Google e exibe Team ID, descrição, os seis Pokémon, Pokepaste, status de EVs e rental code.
+
+O comando `/pteam-featured` está temporariamente desativado enquanto não houver uma aba de featured teams para a Regulation M-C.
 
 Arquivos principais
 
-- [src/index.js](src/index.js#L1) — bot e handler do comando
-- [src/deploy-commands.js](src/deploy-commands.js#L1) — registra o comando `/pstats` na guild
+- [src/index.js](src/index.js#L1) — inicializa e autentica o bot
+- [src/deploy-commands.js](src/deploy-commands.js#L1) — registra os comandos na guild

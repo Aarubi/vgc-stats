@@ -20,7 +20,10 @@ export async function handlePteamCommand(interaction, sheetName = TEAMS_SHEET_NA
     const randomTeam = teams[Math.floor(Math.random() * teams.length)];
     await interaction.editReply({ embeds: [createPteamEmbed(randomTeam)] });
   } catch (error) {
-    console.error(error);
+    console.error(
+      'Erro ao consultar os times:',
+      error.response?.data?.error?.message ?? error.message
+    );
     await interaction.editReply('Erro ao consultar os times da planilha');
   }
 }
