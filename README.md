@@ -34,6 +34,7 @@ Uso
 
 - `/help` — lista todos os comandos disponíveis do bot e uma breve descrição de cada um.
 - `/pstats nome:<nome-ou-id>` — consulta um Pokémon na PokeAPI e exibe seu sprite, habilidades, stats base e ranges no nível 50. As páginas seguintes mostram o uso de Abilities, Items, Spreads, Moves e Teammates.
+- `/pinfo tipo:<habilidade|item> nome:<nome-ou-id>` — consulta a descrição e os principais dados de uma habilidade ou item na PokéAPI. Prioriza textos em português e usa inglês quando não houver tradução disponível.
 - `/pmeta` — exibe o usage mensal dos Pokémon a partir do arquivo em `src/assets`, com rank, nome, percentual de Usage e paginação.
 - `/pteam [pokemon] [rental] [evs]` — sorteia um time da aba `Champions M-C`, com filtros opcionais por Pokémon, rental code e EVs. O resultado permite sortear outro time mantendo os filtros ou abrir o Pokepaste.
 

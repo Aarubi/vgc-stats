@@ -1,5 +1,6 @@
 const COMMAND_COOLDOWNS_MS = new Map([
   ['help', 2_000],
+  ['pinfo', 3_000],
   ['pmeta', 3_000],
   ['pstats', 5_000],
   ['pteam', 3_000]
