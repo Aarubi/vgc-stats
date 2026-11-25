@@ -6,7 +6,7 @@ const MAX_RESPONSE_SIZE = 2 * 1024 * 1024;
 
 export async function getPokemon(nameOrId) {
   const normalizedQuery = nameOrId?.trim().toLowerCase();
-  if (!normalizedQuery || normalizedQuery.length > 64) {
+  if (!normalizedQuery || normalizedQuery.length > 64 || /[^a-z0-9-]/.test(normalizedQuery)) {
     throw new RangeError('Invalid Pokémon name or ID');
   }
 

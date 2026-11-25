@@ -17,7 +17,7 @@ const teamCache = new Map();
 const pendingLoads = new Map();
 
 function logSheetsError(message, error) {
-  console.error(message, error.response?.data?.error?.message ?? error.message);
+  console.error(message, error.response ? `HTTP ${error.response.status}` : error.message);
 }
 
 async function loadTeams(sheetName = TEAMS_SHEET_NAME) {
@@ -59,14 +59,6 @@ function getFilters(interaction) {
     rental: interaction.options.getBoolean('rental'),
     evs: interaction.options.getBoolean('evs')
   };
-}
-
-function describeFilters(filters) {
-  return [
-    filters.pokemon && `Pokémon ${filters.pokemon}`,
-    filters.rental != null && `${filters.rental ? 'com' : 'sem'} rental code`,
-    filters.evs != null && `${filters.evs ? 'com' : 'sem'} EVs`
-  ].filter(Boolean).join(', ');
 }
 
 function getRandomTeam(teams, currentTeam) {
@@ -134,10 +126,7 @@ export async function handlePteamCommand(interaction, sheetName = TEAMS_SHEET_NA
     const filters = getFilters(interaction);
     const teams = filterTeams(await loadTeams(sheetName), filters);
     if (teams.length === 0) {
-      const description = describeFilters(filters);
-      await interaction.editReply(
-        `Nenhum time encontrado${description ? ` com os filtros: ${description}` : ''}.`
-      );
+      await interaction.editReply('Nenhum time encontrado com os filtros informados.');
       return;
     }
 

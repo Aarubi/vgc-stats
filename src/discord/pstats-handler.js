@@ -1,6 +1,7 @@
 import { createPstatsPages, getPstatsPageComponents } from './pstats-pages.js';
 import { getPokemon } from '../pokemon/pokemon-api.js';
-import { getPokemonMetaStats } from '../pokemon/meta-stats.js';
+import { findPokemonMetaStats } from '../pokemon/meta-stats.js';
+import { describeSmogonReport, getSmogonReport } from '../pokemon/smogon-report.js';
 
 const COLLECTOR_TTL_MS = 5 * 60 * 1000;
 const MAX_COLLECTED_INTERACTIONS = 50;
@@ -11,8 +12,9 @@ export async function handlePstatsCommand(interaction) {
 
   try {
     const pokemon = await getPokemon(query);
-    const metaStats = await getPokemonMetaStats(pokemon.name);
-    const pages = createPstatsPages(pokemon, metaStats);
+    const report = await getSmogonReport();
+    const metaStats = findPokemonMetaStats(report.movesets, pokemon.name);
+    const pages = createPstatsPages(pokemon, metaStats, describeSmogonReport(report));
     const updatePage = (page) => interaction.editReply({
       embeds: [pages[page]],
       components: getPstatsPageComponents(page, pages.length)
@@ -44,7 +46,11 @@ export async function handlePstatsCommand(interaction) {
     });
   } catch (error) {
     if (error.response?.status === 404) {
-      await interaction.editReply(`Pokémon não encontrado: ${query}`);
+      await interaction.editReply('Pokémon não encontrado.');
+      return;
+    }
+    if (error instanceof RangeError) {
+      await interaction.editReply('Informe um nome ou ID válido de Pokémon.');
       return;
     }
 

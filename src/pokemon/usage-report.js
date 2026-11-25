@@ -1,10 +1,4 @@
-import { readFile } from 'node:fs/promises';
-import { fileURLToPath } from 'node:url';
-
-const REPORT_PATH = fileURLToPath(new URL('../assets/gen9championsvgc2026regmbbo3-1760.txt', import.meta.url));
-
-export async function getUsageEntries() {
-  const report = await readFile(REPORT_PATH, 'utf8');
+export function parseUsageReport(report) {
   const entries = [];
 
   for (const line of report.split('\n')) {

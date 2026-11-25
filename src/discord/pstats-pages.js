@@ -13,7 +13,7 @@ function createSectionDescription(entries) {
     : 'Não informado';
 }
 
-export function createPstatsPages(pokemon, metaStats) {
+export function createPstatsPages(pokemon, metaStats, source) {
   const pages = [createPokemonEmbed(pokemon)];
   const sprite = getPokemonSprite(pokemon);
 
@@ -21,6 +21,7 @@ export function createPstatsPages(pokemon, metaStats) {
     pages.push(new EmbedBuilder()
       .setTitle(`${capitalize(pokemon.name)} - ${section}`)
       .setDescription(createSectionDescription(metaStats?.sections?.[section] || []))
+      .setFooter({ text: source })
       .setThumbnail(sprite)
       .setColor(0xFF0000));
   }

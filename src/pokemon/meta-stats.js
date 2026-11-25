@@ -1,7 +1,3 @@
-import { readFile } from 'node:fs/promises';
-import { fileURLToPath } from 'node:url';
-
-const META_STATS_PATH = fileURLToPath(new URL('../assets/gen9championsvgc2026regmbbo3-1760-metastats.txt', import.meta.url));
 const SECTIONS = ['Abilities', 'Items', 'Spreads', 'Moves', 'Teammates'];
 
 function normalizeName(name) {
@@ -11,7 +7,7 @@ function normalizeName(name) {
 function getMetaStatsNames(name) {
   const normalizedName = normalizeName(name);
   const baseName = normalizedName.replace(/-(female|male)$/, '');
-  const fallbackNames = [baseName, `${baseName}-mega`];
+  const fallbackNames = [...new Set([normalizedName, baseName, `${baseName}-mega`])];
 
   if (normalizedName.endsWith('-female')) {
     return [`${baseName}-f`, ...fallbackNames];
@@ -41,7 +37,8 @@ function parseBlocks(content) {
     const isBorder = /^\+[-+]+\+$/.test(line);
     const isPokeHeader = isBorder
       && /^\|\s*[^|]+\s*\|$/.test(lines[index + 1] || '')
-      && /^\+[-+]+\+$/.test(lines[index + 2] || '');
+      && /^\+[-+]+\+$/.test(lines[index + 2] || '')
+      && /^\|\s*Raw count:/.test(lines[index + 3] || '');
 
     if (isPokeHeader) {
       currentPokemon = lines[index + 1].replace(/^\|\s*|\s*\|$/g, '').trim();
@@ -66,15 +63,7 @@ function parseBlocks(content) {
   return statsByPokemon;
 }
 
-let metaStatsPromise;
-
-async function getMetaStats() {
-  metaStatsPromise ??= readFile(META_STATS_PATH, 'utf8').then(parseBlocks);
-  return metaStatsPromise;
-}
-
-export async function getPokemonMetaStats(pokemonName) {
-  const statsByPokemon = await getMetaStats();
+export function findPokemonMetaStats(statsByPokemon, pokemonName) {
   return getMetaStatsNames(pokemonName)
     .map((name) => statsByPokemon.get(name))
     .find((stats) => stats !== undefined);
