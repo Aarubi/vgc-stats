@@ -9,7 +9,9 @@
   },
   "scripts": {
     "start": "node src/index.js",
-    "deploy-commands": "node src/deploy-commands.js",
+    "dev": "node --watch src/index.js",
+    "deploy-commands": "node scripts/deploy-commands.js --guild",
+    "deploy-commands:global": "node scripts/deploy-commands.js --global",
     "test": "node --test",
     "audit": "npm audit --omit=dev --audit-level=moderate"
   },

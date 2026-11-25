@@ -11,15 +11,3 @@ export function getBotConfig() {
     googleSheetId: process.env.GOOGLE_SHEET_ID
   };
 }
-
-export function getCommandConfig() {
-  const token = process.env.DISCORD_TOKEN;
-  const clientId = process.env.CLIENT_ID;
-  const guildId = process.env.GUILD_ID;
-
-  if (!token || !clientId || !guildId) {
-    throw new Error('Set DISCORD_TOKEN, CLIENT_ID and GUILD_ID in environment');
-  }
-
-  return { token, clientId, guildId };
-}

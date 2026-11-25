@@ -1,0 +1,65 @@
+name: Atualizar dados da Smogon
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/sync-smogon.yml'
+  schedule:
+    - cron: '43 11 * * *'
+  workflow_dispatch:
+    inputs:
+      period:
+        description: Mês encerrado (AAAA-MM). Em branco usa o mês anterior.
+        type: string
+        required: false
+
+permissions:
+  contents: write
+
+concurrency:
+  group: publish-meta-data
+  cancel-in-progress: false
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version: 22
+          package-manager-cache: false
+
+      - name: Validar e publicar o par de relatórios mensais
+        env:
+          SMOGON_FORMAT: ${{ vars.SMOGON_FORMAT }}
+          SMOGON_PERIOD: ${{ inputs.period }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          output="$(mktemp -d)"
+          existing=()
+          branch="$(git ls-remote --heads origin refs/heads/meta-data)"
+          if [[ -n "$branch" ]]; then
+            git fetch --no-tags origin refs/heads/meta-data:refs/remotes/origin/meta-data
+            git show origin/meta-data:smogon.json > "$output/previous.json"
+            existing+=("$output/previous.json")
+          fi
+
+          node scripts/sync-smogon.js "$output/next" "${existing[@]}"
+          if [[ ! -f "$output/next/smogon.json" ]]; then exit 0; fi
+          if [[ -n "$branch" ]]; then
+            git switch -c meta-data origin/meta-data
+          else
+            git switch --orphan meta-data
+          fi
+
+          cp "$output/next/"* .
+          git add smogon.json usage.txt moveset.txt
+          if git diff --cached --quiet; then exit 0; fi
+          git -c user.name='github-actions[bot]' \
+            -c user.email='41898282+github-actions[bot]@users.noreply.github.com' \
+            commit -m 'Atualiza relatórios mensais da Smogon'
+          git push origin HEAD:refs/heads/meta-data

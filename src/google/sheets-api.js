@@ -52,6 +52,7 @@ export async function getTeams({ apiKey, sheetId, sheetName = TEAMS_SHEET_NAME }
   const range = encodeURIComponent(`'${sheetName}'!A:AZ`);
   const response = await axios.get(`${SHEETS_API_URL}/${sheetId}/values/${range}`, {
     headers: { 'x-goog-api-key': apiKey },
+    maxRedirects: 0,
     timeout: REQUEST_TIMEOUT_MS,
     maxContentLength: MAX_RESPONSE_SIZE,
     maxBodyLength: MAX_RESPONSE_SIZE

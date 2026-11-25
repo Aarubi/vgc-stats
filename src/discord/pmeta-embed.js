@@ -12,15 +12,15 @@ export function getPageCount(entries) {
   return Math.ceil(entries.length / PAGE_SIZE);
 }
 
-export function createPmetaEmbed(entries, page) {
+export function createPmetaEmbed(entries, page, source) {
   const start = page * PAGE_SIZE;
   const pageEntries = entries.slice(start, start + PAGE_SIZE);
   const pageCount = getPageCount(entries);
 
   return new EmbedBuilder()
-    .setTitle('Usage of the Month')
+    .setTitle('Usage mensal')
     .setDescription(createPageDescription(pageEntries))
-    .setFooter({ text: `Página ${page + 1} de ${pageCount}` })
+    .setFooter({ text: `${source} · Página ${page + 1} de ${pageCount}` })
     .setColor(0xFF0000);
 }
 

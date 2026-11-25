@@ -2,9 +2,12 @@ import {
   Client,
   Events,
   GatewayIntentBits,
-  MessageFlags
+  MessageFlags,
+  Options
 } from 'discord.js';
 import { handleHelpCommand } from './help-handler.js';
+import { handlePinfoCommand } from './pinfo-handler.js';
+import { handlePladderCommand } from './pladder-handler.js';
 import { handlePmetaCommand } from './pmeta-handler.js';
 import {
   handlePteamAutocomplete,
@@ -16,6 +19,8 @@ import { takeCommandCooldown } from './rate-limit.js';
 
 const commandHandlers = new Map([
   ['help', handleHelpCommand],
+  ['pinfo', handlePinfoCommand],
+  ['pladder', handlePladderCommand],
   ['pmeta', handlePmetaCommand],
   ['pstats', handlePstatsCommand],
   ['pteam', handlePteamCommand]
@@ -81,6 +86,10 @@ async function handleInteraction(interaction) {
 export function createClient() {
   const client = new Client({
     intents: [GatewayIntentBits.Guilds],
+    makeCache: Options.cacheWithLimits({
+      ...Options.DefaultMakeCacheSettings,
+      MessageManager: 0
+    }),
     allowedMentions: { parse: [], repliedUser: false }
   });
 
