@@ -44,7 +44,11 @@ export async function handlePstatsCommand(interaction) {
     });
   } catch (error) {
     if (error.response?.status === 404) {
-      await interaction.editReply(`Pokémon não encontrado: ${query}`);
+      await interaction.editReply('Pokémon não encontrado.');
+      return;
+    }
+    if (error instanceof RangeError) {
+      await interaction.editReply('Informe um nome ou ID válido de Pokémon.');
       return;
     }
 

@@ -2,7 +2,8 @@ import {
   Client,
   Events,
   GatewayIntentBits,
-  MessageFlags
+  MessageFlags,
+  Options
 } from 'discord.js';
 import { handleHelpCommand } from './help-handler.js';
 import { handlePinfoCommand } from './pinfo-handler.js';
@@ -83,6 +84,10 @@ async function handleInteraction(interaction) {
 export function createClient() {
   const client = new Client({
     intents: [GatewayIntentBits.Guilds],
+    makeCache: Options.cacheWithLimits({
+      ...Options.DefaultMakeCacheSettings,
+      MessageManager: 0
+    }),
     allowedMentions: { parse: [], repliedUser: false }
   });
 

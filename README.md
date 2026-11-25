@@ -2,35 +2,34 @@
 
 Bot em JavaScript para Discord que consulta a PokeAPI e exibe um card em embed com informações do Pokémon.
 
-Setup rápido
+## Desenvolvimento
 
-1. Instale dependências:
+Use Node.js 22 ou superior. Instale as dependências com `npm ci` e copie `.env.example` para `.env`.
 
-```bash
-npm install
-```
+Preencha `DISCORD_TOKEN`, `CLIENT_ID` e `GUILD_ID` para trabalhar com o servidor de testes. Para usar `/pteam`, preencha também `GOOGLE_SHEETS_API_KEY` e `GOOGLE_SHEET_ID`. Restrinja a chave à API do Google Sheets e proteja o arquivo local com `chmod 600 .env`.
 
-2. Crie um arquivo `.env` na raiz do projeto e preencha `DISCORD_TOKEN`, `CLIENT_ID`, `GUILD_ID`, `GOOGLE_SHEETS_API_KEY` e `GOOGLE_SHEET_ID`.
+| Comando | Quando usar |
+| --- | --- |
+| `npm run dev` | Executar localmente com reinício automático ao editar os arquivos carregados pelo bot. |
+| `npm run deploy-commands` | Registrar os comandos apenas no servidor de testes definido por `GUILD_ID`. |
+| `npm test` | Rodar os testes locais. |
+| `npm run audit` | Auditar as dependências usadas em produção. |
 
-Use `.env.example` como modelo, restrinja a chave do Google à API do Google Sheets e proteja o arquivo local:
+## Deploy
 
-```bash
-chmod 600 .env
-```
+Quando a versão do bot que atende aos comandos estiver pronta em produção, use `npm run deploy-commands:global` no ambiente de deploy. O script utiliza o `DISCORD_TOKEN` e o `CLIENT_ID` da aplicação de produção e disponibiliza os comandos nos servidores que a instalaram.
 
-3. Registre o comando na sua guild (teste):
+Execute o registro global quando publicar ou atualizar as definições de comandos. Ele substitui a lista de comandos globais do app sem alterar o registro do servidor de testes.
 
-```bash
-npm run deploy-commands
-```
+## Execução em produção
 
-4. Rode o bot:
+O bot roda diretamente no Node.js e dispensa uma etapa de build. Na hospedagem, instale as dependências com `npm ci --omit=dev`, configure `DISCORD_TOKEN` e as variáveis do Google Sheets para `/pteam`, e use `npm start` para iniciar o processo. A inicialização conecta o bot ao Discord pelo Gateway. O registro dos comandos é uma etapa separada do deploy.
 
-```bash
-npm start
-```
+Na Discloud, cadastre as credenciais nas variáveis da aplicação no painel. O `.discloudignore` exclui arquivos locais de configuração nos envios que respeitam essa lista. Se montar o ZIP manualmente, selecione apenas os arquivos de execução e confira que arquivos `.env` e `.npmrc` ficaram fora.
 
-Uso
+Para adicionar o bot a outro servidor, use o link de instalação gerado pelo Portal de Desenvolvedores do Discord.
+
+## Uso
 
 - `/help` — lista todos os comandos disponíveis do bot e uma breve descrição de cada um.
 - `/pstats nome:<nome-ou-id>` — consulta um Pokémon na PokeAPI e exibe seu sprite, habilidades, stats base e ranges no nível 50. As páginas seguintes mostram o uso de Abilities, Items, Spreads, Moves e Teammates.
@@ -43,4 +42,4 @@ O comando `/pteam-featured` está temporariamente desativado enquanto não houve
 Arquivos principais
 
 - [src/index.js](src/index.js#L1) — inicializa e autentica o bot
-- [src/deploy-commands.js](src/deploy-commands.js#L1) — registra os comandos na guild
+- [scripts/deploy-commands.js](scripts/deploy-commands.js#L1) — registra os comandos no servidor de testes ou globalmente

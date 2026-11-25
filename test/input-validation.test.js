@@ -20,6 +20,7 @@ test('limita entradas textuais nos slash commands', () => {
 test('rejeita consultas inválidas antes de acessar a PokeAPI', async () => {
   await assert.rejects(() => getPokemon(''), RangeError);
   await assert.rejects(() => getPokemon('x'.repeat(65)), RangeError);
+  await assert.rejects(() => getPokemon('player@example.test'), RangeError);
 });
 
 test('normaliza nomes de habilidades e itens para a PokéAPI', () => {
@@ -31,4 +32,5 @@ test('rejeita consultas inválidas de habilidades e itens antes da requisição'
   await assert.rejects(() => getPokemonInfo('move', 'protect'), RangeError);
   await assert.rejects(() => getPokemonInfo('ability', ''), RangeError);
   await assert.rejects(() => getPokemonInfo('item', 'x'.repeat(65)), RangeError);
+  await assert.rejects(() => getPokemonInfo('item', 'https://example.test'), RangeError);
 });

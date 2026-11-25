@@ -16,7 +16,7 @@ export function normalizeInfoQuery(value) {
     .replace(/[\u0300-\u036f]/g, '')
     .replace(/[\s_]+/g, '-');
 
-  if (!normalized || normalized.length > 64) {
+  if (!normalized || normalized.length > 64 || /[^a-z0-9-]/.test(normalized)) {
     throw new RangeError('Invalid ability or item name');
   }
 

@@ -1,11 +1,6 @@
 import { getPokemonInfo } from '../pokemon/info-api.js';
 import { createPinfoEmbed } from './pinfo-embed.js';
 
-const TYPE_LABELS = new Map([
-  ['ability', 'Habilidade'],
-  ['item', 'Item']
-]);
-
 export async function handlePinfoCommand(interaction) {
   const type = interaction.options.getString('tipo', true);
   const query = interaction.options.getString('nome', true);
@@ -16,7 +11,7 @@ export async function handlePinfoCommand(interaction) {
     await interaction.editReply({ embeds: [createPinfoEmbed(type, resource)] });
   } catch (error) {
     if (error.response?.status === 404) {
-      await interaction.editReply(`${TYPE_LABELS.get(type) ?? 'Informação'} não encontrada: ${query}`);
+      await interaction.editReply(type === 'item' ? 'Item não encontrado.' : 'Habilidade não encontrada.');
       return;
     }
 
