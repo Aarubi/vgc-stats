@@ -43,3 +43,16 @@ Arquivos principais
 
 - [src/index.js](src/index.js#L1) — inicializa e autentica o bot
 - [scripts/deploy-commands.js](scripts/deploy-commands.js#L1) — registra os comandos no servidor de testes ou globalmente
+
+
+## Dados de VGC
+
+- `/pmeta` e as páginas de uso de `/pstats` mostram o relatório mensal de [Smogon University / Pokémon Showdown](https://www.smogon.com/stats/) para Champions VGC Bo3 (1760). O rodapé identifica o mês e o regulamento.
+- `/pladder` mostra os 15 Pokémon mais usados na amostra recente de [Project Red Data](https://github.com/jamesrcode/project-red-data). `/pladder nome:Sneasler` detalha uso, itens, habilidades, golpes, distribuições de pontos e parceiros. A fonte reúne replays públicos (Bo1 e Bo3) e sinaliza estimativas e dados de sets complementados pela Smogon.
+- O bot busca as duas fontes só quando solicitado e reutiliza os dados em memória. A Smogon tem cache de 6 h e usa os TXT em `src/assets` como contingência no primeiro acesso. Project Red tem cache de 1 h. Uma falha de atualização preserva a última cópia carregada em memória.
+
+### Atualização automática da Smogon
+
+A integração do workflow em `main` dispara a primeira execução. Para rodar novamente, abra **Actions → Atualizar dados da Smogon → Run workflow**. Deixe o mês em branco para usar o último mês encerrado em UTC. O agendamento diário repete a consulta até o par de relatórios estar disponível. O workflow valida o ranking e os movesets antes de publicar `usage.txt`, `moveset.txt` e `smogon.json` juntos na branch de dados `meta-data`. Use o mês explicitamente para baixar novamente o mês publicado. Em caso de falha, a branch mantém a última publicação.
+
+Quando o regulamento mudar, configure `SMOGON_FORMAT` em **Settings → Secrets and variables → Actions → Variables** com o slug Champions VGC Bo3 publicado pela Smogon. O valor inicial é `gen9championsvgc2026regmcbo3`. A atualização mensal usa apenas o `GITHUB_TOKEN` do workflow. Depois de implantar esta versão no Discloud, os dados novos chegam sem novo deploy. Registre `/pladder` junto com os comandos existentes após implantar o código compatível.

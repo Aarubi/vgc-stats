@@ -7,6 +7,7 @@ import {
 } from 'discord.js';
 import { handleHelpCommand } from './help-handler.js';
 import { handlePinfoCommand } from './pinfo-handler.js';
+import { handlePladderCommand } from './pladder-handler.js';
 import { handlePmetaCommand } from './pmeta-handler.js';
 import {
   handlePteamAutocomplete,
@@ -19,6 +20,7 @@ import { takeCommandCooldown } from './rate-limit.js';
 const commandHandlers = new Map([
   ['help', handleHelpCommand],
   ['pinfo', handlePinfoCommand],
+  ['pladder', handlePladderCommand],
   ['pmeta', handlePmetaCommand],
   ['pstats', handlePstatsCommand],
   ['pteam', handlePteamCommand]

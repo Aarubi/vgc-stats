@@ -1,4 +1,4 @@
-import { getUsageEntries } from '../pokemon/usage-report.js';
+import { describeSmogonReport, getSmogonReport } from '../pokemon/smogon-report.js';
 import {
   createPmetaEmbed,
   getPageComponents,
@@ -8,10 +8,11 @@ import {
 const COLLECTOR_TTL_MS = 5 * 60 * 1000;
 const MAX_COLLECTED_INTERACTIONS = 50;
 
-async function updatePage(interaction, entries, page) {
+async function updatePage(interaction, report, page) {
+  const entries = report.usage;
   const pageCount = getPageCount(entries);
   return interaction.editReply({
-    embeds: [createPmetaEmbed(entries, page)],
+    embeds: [createPmetaEmbed(entries, page, describeSmogonReport(report))],
     components: getPageComponents(page, pageCount)
   });
 }
@@ -20,8 +21,8 @@ export async function handlePmetaCommand(interaction) {
   await interaction.deferReply();
 
   try {
-    const entries = await getUsageEntries();
-    const message = await updatePage(interaction, entries, 0);
+    const report = await getSmogonReport();
+    const message = await updatePage(interaction, report, 0);
 
     const collector = message.createMessageComponentCollector({
       time: COLLECTOR_TTL_MS,
@@ -36,7 +37,7 @@ export async function handlePmetaCommand(interaction) {
         const page = Number(currentPage) + (direction === 'next' ? 1 : -1);
 
         await buttonInteraction.deferUpdate();
-        await updatePage(interaction, entries, page);
+        await updatePage(interaction, report, page);
       } catch (error) {
         console.error('Erro ao atualizar a página de usage:', error.message);
       }

@@ -40,6 +40,18 @@ export const commands = [
     ]
   },
   {
+    name: 'pladder',
+    description: 'Consulta o usage e os sets recentes do Project Red',
+    options: [
+      {
+        name: 'nome',
+        description: 'Nome do Pokémon ou de sua forma. Deixe em branco para ver o ranking',
+        type: 3,
+        max_length: 64
+      }
+    ]
+  },
+  {
     name: 'pmeta',
     description: 'Mostra o usage mensal dos Pokémon'
   },
