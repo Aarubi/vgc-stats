@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
 import { test } from 'node:test';
 import { createDataCache } from '../src/pokemon/remote-data.js';
-import { parseSmogonReport } from '../src/pokemon/smogon-report.js';
+import { parseSmogonReport, serializeSmogonSnapshot } from '../src/pokemon/smogon-report.js';
 import { findProjectRedPokemon, parseProjectRed } from '../src/pokemon/project-red.js';
 import { createPladderEmbed } from '../src/discord/pladder-handler.js';
 
@@ -31,6 +31,18 @@ test('valida o par mensal de ranking e movesets da Smogon', () => {
     ...snapshot,
     movesetText: snapshot.movesetText.replace('Sneasler', 'Incineroar')
   }), /incompatíveis/);
+});
+
+test('limita o tamanho do snapshot mensal serializado em bytes UTF-8', () => {
+  const limit = 4 * 1024 * 1024;
+  const snapshot = { usageText: 'a'.repeat(limit - 100), movesetText: '' };
+  const overhead = Buffer.byteLength(JSON.stringify({ ...snapshot, usageText: '' }) + '\n');
+  snapshot.movesetText = 'é'.repeat((100 - overhead) / 2);
+  if (overhead % 2 !== 0) snapshot.usageText += 'a';
+
+  assert.equal(Buffer.byteLength(serializeSmogonSnapshot(snapshot)), limit);
+  snapshot.movesetText += 'é';
+  assert.throws(() => serializeSmogonSnapshot(snapshot), /acima do limite/);
 });
 
 test('mostra formas, percentuais e origem dos sets do Project Red', () => {

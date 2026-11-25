@@ -5,7 +5,8 @@ import {
   parseSmogonReport,
   REPORT_PERIOD,
   SMOGON_FORMAT,
-  SMOGON_RATING
+  SMOGON_RATING,
+  serializeSmogonSnapshot
 } from '../src/pokemon/smogon-report.js';
 
 const [outputDirectory, existingSnapshot] = process.argv.slice(2);
@@ -46,12 +47,13 @@ if (existing?.period === period && existing.format === format && !process.env.SM
   if (!usageText || !movesetText) process.exit(0);
 
   const snapshot = { period, format, rating, usageText, movesetText };
+  const json = serializeSmogonSnapshot(snapshot);
   const { usage } = parseSmogonReport(snapshot);
   await mkdir(outputDirectory, { recursive: true });
   await Promise.all([
     writeFile(join(outputDirectory, 'usage.txt'), usageText),
     writeFile(join(outputDirectory, 'moveset.txt'), movesetText),
-    writeFile(join(outputDirectory, 'smogon.json'), `${JSON.stringify(snapshot)}\n`)
+    writeFile(join(outputDirectory, 'smogon.json'), json)
   ]);
   console.log(`Smogon ${period} · ${format} · ${usage.length} Pokémon.`);
 }

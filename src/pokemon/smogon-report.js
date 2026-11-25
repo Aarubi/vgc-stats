@@ -1,7 +1,7 @@
 import { readFile } from 'node:fs/promises';
 import { parseBlocks } from './meta-stats.js';
 import { parseUsageReport } from './usage-report.js';
-import { createDataCache, fetchData } from './remote-data.js';
+import { createDataCache, fetchData, MAX_DATA_BYTES } from './remote-data.js';
 
 export const SMOGON_FORMAT = /^gen9championsvgc20\d{2}reg[a-z0-9]+bo3$/;
 export const REPORT_PERIOD = /^20\d{2}-(?:0[1-9]|1[0-2])$/;
@@ -26,6 +26,14 @@ export function parseSmogonReport({ period, format, rating, usageText, movesetTe
   }
 
   return { period, format, rating, usage, movesets };
+}
+
+export function serializeSmogonSnapshot(snapshot) {
+  const json = `${JSON.stringify(snapshot)}\n`;
+  if (Buffer.byteLength(json, 'utf8') > MAX_DATA_BYTES) {
+    throw new Error('Snapshot da Smogon acima do limite de tamanho.');
+  }
+  return json;
 }
 
 async function loadBundledReport() {

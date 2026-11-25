@@ -1,4 +1,4 @@
-const MAX_BYTES = 4 * 1024 * 1024;
+export const MAX_DATA_BYTES = 4 * 1024 * 1024;
 
 export async function fetchData(url) {
   const response = await fetch(url, {
@@ -18,7 +18,7 @@ export async function fetchData(url) {
   const chunks = [];
   for await (const chunk of response.body) {
     size += chunk.byteLength;
-    if (size > MAX_BYTES) throw new Error('Arquivo de dados acima do limite de tamanho.');
+    if (size > MAX_DATA_BYTES) throw new Error('Arquivo de dados acima do limite de tamanho.');
     chunks.push(decoder.decode(chunk, { stream: true }));
   }
   chunks.push(decoder.decode());
