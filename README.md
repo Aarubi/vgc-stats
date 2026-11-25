@@ -17,9 +17,9 @@ Preencha `DISCORD_TOKEN`, `CLIENT_ID` e `GUILD_ID` para trabalhar com o servidor
 
 ## Deploy
 
-Quando a versão do bot que atende aos comandos estiver pronta em produção, use `npm run deploy-commands:global` no ambiente de deploy. O script utiliza o `DISCORD_TOKEN` e o `CLIENT_ID` da aplicação de produção e disponibiliza os comandos nos servidores que a instalaram.
+Configure uma vez o ambiente `discord-production` em **Settings → Environments** no GitHub. Em **Deployment branches and tags**, permita apenas a branch `main`. Em **Environment secrets**, adicione `DISCORD_TOKEN` com o token do bot de produção. Em **Environment variables**, adicione `CLIENT_ID` com o Application ID do mesmo aplicativo no Portal de Desenvolvedores do Discord.
 
-Execute o registro global quando publicar ou atualizar as definições de comandos. Ele substitui a lista de comandos globais do app sem alterar o registro do servidor de testes.
+Quando publicar ou mudar as definições dos comandos, suba primeiro a versão compatível do bot no Discloud. Depois, no GitHub, abra **Actions → Registrar comandos globais do Discord → Run workflow** e selecione a branch padrão (`main`). O workflow roda os testes e usa `npm run deploy-commands:global` para substituir a lista global de comandos pelos comandos dessa revisão. O registro do servidor de testes continua separado.
 
 ## Execução em produção
 
